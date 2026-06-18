@@ -8,6 +8,10 @@ from .quotes import hourly_text
 from .storage import ReminderStore
 
 
+HOURLY_REPEAT_COUNT = 3
+HOURLY_REPEAT_INTERVAL_SECONDS = 10
+
+
 class ReminderScheduler(QObject):
     fly_requested = Signal(str)
     data_changed = Signal()
@@ -53,8 +57,14 @@ class ReminderScheduler(QObject):
             return
 
         top_of_hour = now.replace(minute=0, second=0, microsecond=0)
-        if self._last_check < top_of_hour <= now:
-            self.fly_requested.emit(hourly_text(now.hour))
+        grace = timedelta(seconds=3)
+        for index in range(HOURLY_REPEAT_COUNT):
+            fire_time = top_of_hour + timedelta(
+                seconds=index * HOURLY_REPEAT_INTERVAL_SECONDS
+            )
+            if self._last_check < fire_time <= now and now - fire_time <= grace:
+                self.fly_requested.emit(hourly_text(now.hour, index))
+                break
 
     def _check_meetings(self, now: datetime) -> bool:
         changed = False
