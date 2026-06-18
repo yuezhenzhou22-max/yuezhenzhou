@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 from PySide6.QtCore import QObject, Signal
@@ -8,7 +9,13 @@ from PySide6.QtCore import QObject, Signal
 from .models import Reminder
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
+def app_root() -> Path:
+    if getattr(sys, "frozen", False):
+        return Path(sys.executable).resolve().parent
+    return Path(__file__).resolve().parents[1]
+
+
+PROJECT_ROOT = app_root()
 DEFAULT_DATA_FILE = PROJECT_ROOT / "reminders.json"
 
 
