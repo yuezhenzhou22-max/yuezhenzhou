@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+reminders.json
+.pytest_cache/
+build/
+dist/
