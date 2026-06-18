@@ -28,7 +28,7 @@ from PySide6.QtWidgets import QWidget
 class AirplaneOverlay(QWidget):
     finished = Signal()
 
-    def __init__(self, message: str, duration_ms: int = 7200):
+    def __init__(self, message: str, duration_ms: int = 14400):
         super().__init__()
         self.message = message
         self._progress = 0.0
